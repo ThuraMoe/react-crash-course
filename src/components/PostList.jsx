@@ -5,8 +5,13 @@ import classes from "./PostList.module.css"
 import Modal from "./Modal";
 
 function PostList() {
+    const [modalIsVisible, setModalIsVisible] = useState(true);
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
+
+    function hideModalHandler() {
+        setModalIsVisible(false);
+    }
 
     function titleChangeHandler(event) {
         setTitle(event.target.value);
@@ -16,12 +21,23 @@ function PostList() {
         setAuthor(event.target.value);
     }
 
+    let modalContent;
+    if(modalIsVisible) {
+        modalContent = 
+            <Modal onClose={hideModalHandler}>
+                <NewPost onTitleChange={titleChangeHandler} onAuthorChange={authorChangeHandler} />
+            </Modal>;
+    }
+
 
     return (
         <>
-            <Modal>
-                <NewPost onTitleChange={titleChangeHandler} onAuthorChange={authorChangeHandler} />
-            </Modal>
+            {
+            modalIsVisible && 
+                <Modal onClose={hideModalHandler}>
+                    <NewPost onTitleChange={titleChangeHandler} onAuthorChange={authorChangeHandler} />
+                </Modal>
+            }
             <ul className={classes.posts}>
                 <Post author={author} title={title} />
                 <Post author="Sham Kaseem" title="Dancing with Anxiety" />
